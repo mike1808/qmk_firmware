@@ -95,6 +95,7 @@ enum combos {
 
 #define OS_GIT OSL(GIT)
 #define TT_FN TT(FUNCTIONS)
+#define LALTSHF LALT(KC_LSHIFT)
 
 #define OS_LGUI OSM(MOD_LGUI)
 #define OS_RGUI OSM(MOD_RGUI)
