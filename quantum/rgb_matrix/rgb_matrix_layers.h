@@ -14,18 +14,5 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define COMBO_COUNT 1
-#define COMBO_TERM 100
-
-#define RGB_MATRIX_KEYPRESSES
-#define RGB_DISABLE_WHEN_USB_SUSPENDED true
-#define RGB_DISABLE_TIMEOUT 120
-
-#define MACRO_TIMER 5
-
-#define TAPPING_TOGGLE 3
-
-#define WPM_SMOOTHING 0.1
-
-// this is for macOS so keyboard can work after sleep
-#define NO_USB_STARTUP_CHECK
+typedef uint8_t ledmap[DRIVER_LED_TOTAL][3];
+extern const ledmap ledmaps[];

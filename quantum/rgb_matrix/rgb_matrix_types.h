@@ -96,3 +96,8 @@ typedef union {
 #if defined(_MSC_VER)
 #    pragma pack(pop)
 #endif
+
+#ifdef RGB_MATRIX_LAYES_ENABLED
+typedef uint8_t ledmap[DRIVER_LED_TOTAL][3];
+#endif // RGB_MATRIX_LAYES_ENABLED
+

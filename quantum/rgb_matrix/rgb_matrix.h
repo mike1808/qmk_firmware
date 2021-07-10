@@ -226,3 +226,9 @@ extern last_hit_t g_last_hit_tracker;
 #ifdef RGB_MATRIX_FRAMEBUFFER_EFFECTS
 extern uint8_t g_rgb_frame_buffer[MATRIX_ROWS][MATRIX_COLS];
 #endif
+
+#ifdef RGB_MATRIX_LAYES_ENABLED
+extern const ledmap ledmaps[];
+void rgb_matrix_layers_enable(void);
+void rgb_matrix_layers_disable(void);
+#endif // RGB_MATRIX_LAYES_ENABLED

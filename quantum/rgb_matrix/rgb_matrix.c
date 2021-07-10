@@ -25,6 +25,10 @@
 
 #include <lib/lib8tion/lib8tion.h>
 
+#ifdef RGB_MATRIX_LAYES_ENABLED
+#    include "action_layer.h"
+#endif
+
 #ifndef RGB_MATRIX_CENTER
 const led_point_t k_rgb_matrix_center = {112, 32};
 #else
@@ -146,6 +150,11 @@ static last_hit_t last_hit_buffer;
 // split rgb matrix
 #if defined(RGB_MATRIX_ENABLE) && defined(RGB_MATRIX_SPLIT)
 const uint8_t k_rgb_matrix_split[2] = RGB_MATRIX_SPLIT;
+#endif
+
+// rgb layers
+#ifdef RGB_MATRIX_LAYES_ENABLED
+static bool layers_enabled = true;
 #endif
 
 void eeconfig_read_rgb_matrix(void) { eeprom_read_block(&rgb_matrix_config, EECONFIG_RGB_MATRIX, sizeof(rgb_matrix_config)); }
@@ -464,6 +473,10 @@ void rgb_matrix_indicators_advanced(effect_params_t *params) {
 #endif
     rgb_matrix_indicators_advanced_kb(min, max);
     rgb_matrix_indicators_advanced_user(min, max);
+
+#ifdef RGB_MATRIX_LAYES_ENABLED
+    rgb_matrix_layermaps_handler(min, max);
+#endif  // RGB_MATRIX_LAYES_ENABLED
 }
 
 __attribute__((weak)) void rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {}
@@ -638,3 +651,35 @@ void rgb_matrix_decrease_speed(void) { rgb_matrix_decrease_speed_helper(true); }
 led_flags_t rgb_matrix_get_flags(void) { return rgb_matrix_config.flags; }
 
 void rgb_matrix_set_flags(led_flags_t flags) { rgb_matrix_config.flags = flags; }
+
+#ifdef RGB_MATRIX_LAYES_ENABLED
+void rgb_matrix_layers_handler(uint8_t led_min, uint8_t led_max) {
+    if (!rgb_matrix_is_enabled() || !layers_enabled) {
+        return;
+    }
+
+    layer_state_t layer   = get_highest_layer();
+    uint8_t       hsv_val = rgb_matrix_get_val();
+
+    for (int i = 0; i < DRIVER_LED_TOTAL; i++) {
+        HSV hsv = {
+            .h = pgm_read_byte(&ledmaps[layer][i][0]),
+            .s = pgm_read_byte(&ledmaps[layer][i][1]),
+            .v = hsv_val,
+        };
+
+        if (hsv.h || hsv.s) {
+            RGB rgb = hsv_to_rgb(hsv);
+            RGB_MATRIX_INDICATOR_SET_COLOR(i, rgb.r, rgb.g, rgb.b);
+        }
+    }
+}
+
+void rgb_matrix_layers_enable() {
+    layers_enabled = true;
+}
+
+void rgb_matrix_layers_disable() {
+    layers_enabled = false;
+}
+#endif  // RGB_MATRIX_LAYES_ENABLED
