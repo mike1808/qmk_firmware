@@ -18,7 +18,7 @@
 #if defined(RGB_MATRIX_ENABLE)
 #    include "rgb/rgb_matrix_stuff.h"
 #endif
-#if defined(OLED_ENABLE)
+#if defined(CUSTOM_OLED_DRIVER)
 #    include "oled/oled_stuff.h"
 #endif
 #ifdef SPLIT_KEYBOARD
