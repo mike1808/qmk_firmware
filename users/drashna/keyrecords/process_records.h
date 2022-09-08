@@ -133,7 +133,7 @@ Custom Keycodes for Diablo 3 layer
 But since TD() doesn't work when tap dance is disabled
 We use custom codes here, so we can substitute the right stuff
 */
-#ifdef TAP_DANCE_ENABLE
+#ifdef CUSTOM_TAP_DANCE
 #    define KC_D3_1 TD(TD_D3_1)
 #    define KC_D3_2 TD(TD_D3_2)
 #    define KC_D3_3 TD(TD_D3_3)

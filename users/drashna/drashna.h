@@ -9,7 +9,7 @@
 #include "keyrecords/process_records.h"
 #include "callbacks.h"
 
-#ifdef TAP_DANCE_ENABLE
+#ifdef CUSTOM_TAP_DANCE
 #    include "keyrecords/tap_dances.h"
 #endif // TAP_DANCE_ENABLE
 #if defined(RGBLIGHT_ENABLE)

@@ -16,6 +16,7 @@
  */
 
 #include "drashna.h"
+#include "oled_stuff.h"
 #ifdef UNICODE_COMMON_ENABLE
 #    include "process_unicode_common.h"
 #    include "keyrecords/unicode.h"
@@ -24,6 +25,8 @@
 #    include "keyrecords/autocorrection/autocorrection.h"
 #endif
 #include <string.h>
+
+#include "rgb_effects_names.h"
 
 // #define OLED_DISPLAY_VERBOSE
 
@@ -34,6 +37,15 @@ extern bool host_driver_disabled;
 uint32_t        oled_timer                        = 0;
 char            keylog_str[OLED_KEYLOGGER_LENGTH] = {0};
 static uint16_t log_timer                         = 0;
+uint32_t        rgb_effect_timer                  = 0;
+
+enum oled_render_mode {
+    OLED_RENDER_LAYER_DEFAULT = 0,
+    OLED_RENDER_LAYER_RGB     = 1,
+    OLED_RENDER_LAYER_LAST,
+};
+
+int current_render_mode = OLED_RENDER_LAYER_DEFAULT;
 
 // clang-format off
 static const char PROGMEM code_to_name[256] = {
@@ -104,6 +116,11 @@ bool process_record_user_oled(uint16_t keycode, keyrecord_t *record) {
 #if defined(KEYLOGGER_ENABLE)
         add_keylog(keycode, record);
 #endif
+        switch (keycode) {
+            case RGB_TOG ... RGB_MODE_RGBTEST:
+                rgb_effect_timer = timer_read32();
+                break;
+        }
     }
     return true;
 }
@@ -302,17 +319,9 @@ void render_keylock_status(led_t led_usb_state, uint8_t col, uint8_t line) {
 #ifdef CAPS_WORD_ENABLE
     led_usb_state.caps_lock |= is_caps_word_on();
 #endif
-    oled_write_P(PSTR(OLED_RENDER_LOCK_NAME), false);
-#if !defined(OLED_DISPLAY_VERBOSE)
-    oled_write_P(PSTR(" "), false);
-#endif
     oled_write_P(PSTR(OLED_RENDER_LOCK_NUML), led_usb_state.num_lock);
     oled_write_P(PSTR(" "), false);
     oled_write_P(PSTR(OLED_RENDER_LOCK_CAPS), led_usb_state.caps_lock);
-#if defined(OLED_DISPLAY_VERBOSE)
-    oled_write_P(PSTR(" "), false);
-    oled_write_P(PSTR(OLED_RENDER_LOCK_SCLK), led_usb_state.scroll_lock);
-#endif
 }
 
 /**
@@ -337,16 +346,16 @@ void render_mod_status(uint8_t modifiers, uint8_t col, uint8_t line) {
 
 #if defined(OLED_DISPLAY_VERBOSE)
     oled_write_P(mod_status[0], (modifiers & MOD_BIT(KC_LSHIFT)));
-    oled_write_P(mod_status[!keymap_config.swap_lctl_lgui ? 3 : 4], (modifiers & MOD_BIT(KC_LGUI)));
+    oled_write_P(mod_status[!keymap_config.swap_lalt_lgui ? 3 : 4], (modifiers & MOD_BIT(KC_LGUI)));
     oled_write_P(mod_status[2], (modifiers & MOD_BIT(KC_LALT)));
     oled_write_P(mod_status[1], (modifiers & MOD_BIT(KC_LCTL)));
     oled_write_P(mod_status[1], (modifiers & MOD_BIT(KC_RCTL)));
     oled_write_P(mod_status[2], (modifiers & MOD_BIT(KC_RALT)));
-    oled_write_P(mod_status[!keymap_config.swap_lctl_lgui ? 3 : 4], (modifiers & MOD_BIT(KC_RGUI)));
+    oled_write_P(mod_status[!keymap_config.swap_lalt_lgui ? 3 : 4], (modifiers & MOD_BIT(KC_RGUI)));
     oled_write_P(mod_status[0], (modifiers & MOD_BIT(KC_RSHIFT)));
 #else
     oled_write_P(mod_status[0], (modifiers & MOD_MASK_SHIFT));
-    oled_write_P(mod_status[!keymap_config.swap_lctl_lgui ? 3 : 4], (modifiers & MOD_MASK_GUI));
+    oled_write_P(mod_status[!keymap_config.swap_lalt_lgui ? 3 : 4], (modifiers & MOD_MASK_GUI));
     oled_write_P(PSTR(" "), false);
     oled_write_P(mod_status[2], (modifiers & MOD_MASK_ALT));
     oled_write_P(mod_status[1], (modifiers & MOD_MASK_CTRL));
@@ -366,7 +375,7 @@ void render_bootmagic_status(uint8_t col, uint8_t line) {
 
     oled_set_cursor(col, line);
 
-    if (keymap_config.swap_lctl_lgui) {
+    if (keymap_config.swap_lalt_lgui) {
         oled_write_P(logo[1][0], false);
     } else {
         oled_write_P(logo[0][0], false);
@@ -383,7 +392,7 @@ void render_bootmagic_status(uint8_t col, uint8_t line) {
 
     oled_set_cursor(col, line + 1);
 
-    if (keymap_config.swap_lctl_lgui) {
+    if (keymap_config.swap_lalt_lgui) {
         oled_write_P(logo[1][1], false);
     } else {
         oled_write_P(logo[0][1], false);
@@ -592,22 +601,89 @@ void render_mouse_mode(uint8_t col, uint8_t line) {
 
 void render_status_right(void) {}
 
-void render_status_left(void) {
+void render_mode_default(void) {
     render_bootmagic_status(0, 0);
     render_layer_state(0, 2);
     render_mod_status(get_mods() | get_oneshot_mods(), 0, 5);
     render_pointing_dpi_status(charybdis_get_pointer_sniping_enabled() ? charybdis_get_pointer_sniping_dpi() : charybdis_get_pointer_default_dpi(), 0, 8);
-    render_mouse_mode(0, 11);
+    render_keylock_status(host_keyboard_led_state(), 0, 10);
+    render_mouse_mode(0, 12);
 
 #if defined(KEYLOGGER_ENABLE)
-    render_keylogger_status(0, 13);
-#endif
-
-#if defined(DEBUG_MATRIX_SCAN_RATE)
-    render_matrix_scan_rate(0, 14);
+    render_keylogger_status(0, 15);
+#elif defined(DEBUG_MATRIX_SCAN_RATE)
+    render_matrix_scan_rate(0, 15);
 #elif defined(WPM_ENABLE)
-    render_wpm(0, 14);
+    render_wpm(0, 15);
 #endif
+}
+
+void render_mode_rgb(void) {
+    render_rgb_effect(0, 0);
+}
+
+void render_current_mode(void) {
+    switch (current_render_mode) {
+        case OLED_RENDER_LAYER_DEFAULT:
+            render_mode_default();
+            break;
+        case OLED_RENDER_LAYER_RGB:
+            render_mode_rgb();
+            break;
+    }
+}
+
+void render_status_left(void) {
+    int new_mode = current_render_mode;
+    if (rgb_effect_timer != 0 && timer_elapsed32(rgb_effect_timer) < OLED_RENDER_RGB_EFFECT_NAME_TIMEOUT) {
+        new_mode = OLED_RENDER_LAYER_RGB;
+    } else {
+        new_mode = OLED_RENDER_LAYER_DEFAULT;
+    }
+
+    if (new_mode != current_render_mode) {
+        oled_clear();
+    }
+
+    current_render_mode = new_mode;
+
+    render_current_mode();
+}
+
+void render_rgb_effect(uint8_t col, uint8_t line) {
+    oled_set_cursor(col, line);
+
+    uint8_t mode  = rgb_matrix_get_mode();
+    HSV     hsv   = rgb_matrix_get_hsv();
+    uint8_t speed = rgb_matrix_get_speed();
+
+    oled_write_P(PSTR(" RGB "), true);
+    oled_set_cursor(col, ++line);
+    oled_write(get_u8_str(mode, ' '), false);
+    line++;
+    oled_set_cursor(col, ++line);
+    oled_write_P(get_rgb_matrix_anim_text(mode), false);
+
+    line += 7;
+    oled_set_cursor(col, line);
+
+    oled_write_P(PSTR("H"), true);
+    oled_advance_char();
+    oled_write(get_u8_str(hsv.h, ' '), false);
+    oled_set_cursor(col, ++line);
+    oled_write_P(PSTR("S"), true);
+    oled_advance_char();
+    oled_write(get_u8_str(hsv.s, ' '), false);
+    oled_set_cursor(col, ++line);
+    oled_write_P(PSTR("V"), true);
+    oled_advance_char();
+    oled_write(get_u8_str(hsv.v, ' '), false);
+    oled_set_cursor(col, ++line);
+
+    oled_write_P(PSTR("P"), true);
+    oled_advance_char();
+    oled_write(get_u8_str(speed, ' '), false);
+    oled_set_cursor(col, ++line);
 }
 
 __attribute__((weak)) oled_rotation_t oled_init_keymap(oled_rotation_t rotation) {

@@ -20,6 +20,12 @@
 #    include "oled/oled_stuff.h"
 #endif // OLED_ENABLE
 
+enum {
+    TD_ESC_TAB,
+};
+
+#define ESC_TAB TD(TD_ESC_TAB)
+
 // clang-format off
 #define LAYOUT_charybdis_5x6_wrapper(...) LAYOUT_charybdis_5x6(__VA_ARGS__)
 #define LAYOUT_charybdis_5x6_base( \
@@ -29,12 +35,12 @@
   ) \
   LAYOUT_charybdis_5x6_wrapper( \
      KC_GRV,  ________________NUMBER_LEFT________________,            ________________NUMBER_RIGHT_______________, KC_MINS, \
-     KC_ESC,   K01,    K02,     K03,     K04,     K05,                K06,     K07,     K08,     K09,     K0A,     K0B, \
-     LALT_T(KC_TAB), K11, K12,  K13,     K14,     K15,                K16,     K17,     K18,     K19,     K1A,     RALT_T(K1B), \
+     KC_TAB,   K01,    K02,     K03,     K04,     K05,                K06,     K07,     K08,     K09,     K0A,     K0B, \
+     LALT_T(KC_ESC), K11, K12,  K13,     K14,     K15,                K16,     K17,     K18,     K19,     K1A,     RALT_T(K1B), \
      OS_LSFT, CTL_T(K21), K22,  K23,     K24,     K25,                K26,     K27,     K28,     K29, RCTL_T(K2A), OS_RSFT, \
                        OS_LGUI, OS_LALT,                                                OS_RALT, OS_RGUI, \
                                 BK_LWER, KC_SPC,                                        DL_RAIS,  \
-                                         RGB_TOG,   KC_CCCV,                     KC_ENT,  \
+                                         KC_ESC,   KC_CCCV,                     KC_ENT,  \
                                          KC_MUTE, TT(_MOUSE),      TT(_MOUSE), DRGSCRL  \
   )
 #define LAYOUT_base_wrapper(...)       LAYOUT_charybdis_5x6_base(__VA_ARGS__)
@@ -80,8 +86,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        QK_MAKE, _______, _______, _______, _______ ,_______,                        _______, _______, _______ , _______, _______, QK_BOOT,
           VRSN, _________________ADJUST_L1_________________,                        _________________ADJUST_R1_________________,  EE_CLR,
        KEYLOCK, _________________ADJUST_L2_________________,                        _________________ADJUST_R2_________________,  TG_MODS,
-         DEBUG, _________________ADJUST_L3_________________,                        _________________ADJUST_R3_________________,  KC_MPLY,
-                   _______, _______,                                                            TG_GAME, TG_DBLO,
+       _______, _________________ADJUST_L3_________________,                        _________________ADJUST_R3_________________,  KC_MPLY,
+                           DEBUG, _______,                                                            _______, _______,
                                             _______, QK_RBT,                                  KC_NUKE,
                                                      _______, _______,               _______,
                                                      _______, _______,      KC_NUKE, _______
@@ -109,3 +115,9 @@ void keyboard_post_init_keymap(void) {
     // debug_enable = true;
     // debug_mouse  = true;
 }
+
+// Tap Dance definitions
+qk_tap_dance_action_t tap_dance_actions[] = {
+    // Tap once for Escape, twice for Caps Lock
+    [TD_ESC_TAB] = ACTION_TAP_DANCE_DOUBLE(KC_TAB, KC_ESC),
+};
