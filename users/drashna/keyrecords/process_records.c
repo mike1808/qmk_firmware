@@ -73,7 +73,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             break;
 
         case KC_DIABLO_CLEAR: // reset all Diablo timers, disabling them
-#ifdef TAP_DANCE_ENABLE
+#ifdef CUSTOM_TAP_DANCE
             if (record->event.pressed) {
                 for (uint8_t index = 0; index < 4; index++) {
                     diablo_timer[index].key_interval = 0;
@@ -87,9 +87,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 copy_paste_timer = timer_read();
             } else {
                 if (timer_elapsed(copy_paste_timer) > TAPPING_TERM) { // Hold, copy
-                    tap_code16(LCTL(KC_C));
+                    if (keymap_config.swap_lalt_lgui) {
+                        tap_code16(LGUI(KC_C));
+                    } else {
+                        tap_code16(LCTL(KC_C));
+                    }
+
                 } else { // Tap, paste
-                    tap_code16(LCTL(KC_V));
+                    if (keymap_config.swap_lalt_lgui) {
+                        tap_code16(LGUI(KC_V));
+                    } else {
+                        tap_code16(LCTL(KC_V));
+                    }
                 }
             }
             break;

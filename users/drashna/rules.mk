@@ -55,6 +55,7 @@ CUSTOM_TAP_DANCE ?= yes
 ifeq ($(strip $(CUSTOM_TAP_DANCE)), yes)
     ifeq ($(strip $(TAP_DANCE_ENABLE)), yes)
         SRC += $(USER_PATH)/keyrecords/tap_dances.c
+        OPT_DEFS += -DCUSTOM_TAP_DANCE
     endif
 endif
 

@@ -36,6 +36,7 @@ void            render_wpm_graph(uint8_t max_lines_graph, uint8_t vertical_offse
 void            render_unicode_mode(uint8_t col, uint8_t line);
 void            render_rgb_hsv(uint8_t col, uint8_t line);
 void            render_mouse_mode(uint8_t col, uint8_t line);
+void            render_rgb_effect(uint8_t col, uint8_t line);
 void            matrix_scan_oled(void);
 
 void oled_pan_section(bool left, uint16_t y_start, uint16_t y_end, uint16_t x_start, uint16_t x_end);
@@ -63,8 +64,8 @@ void oled_pan_section(bool left, uint16_t y_start, uint16_t y_end, uint16_t x_st
 #define OLED_RENDER_LAYER_MODS " M"
 
 #define OLED_RENDER_LOCK_NAME "Lock:"
-#define OLED_RENDER_LOCK_NUML "N"
-#define OLED_RENDER_LOCK_CAPS "C"
+#define OLED_RENDER_LOCK_NUML "Nu"
+#define OLED_RENDER_LOCK_CAPS "Ca"
 #define OLED_RENDER_LOCK_SCLK "S"
 
 #define OLED_RENDER_MODS_NAME "Mods: "
@@ -104,3 +105,5 @@ extern char keylog_str[OLED_KEYLOGGER_LENGTH];
 #ifndef OLED_WPM_GRAPH_GRAPH_LINE_THICKNESS
 #    define OLED_WPM_GRAPH_GRAPH_LINE_THICKNESS 2
 #endif
+
+#define OLED_RENDER_RGB_EFFECT_NAME_TIMEOUT 3000

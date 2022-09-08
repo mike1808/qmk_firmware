@@ -34,3 +34,11 @@ Cinemark
 #undef _________________RAISE_R3__________________
 #define _________________RAISE_R3__________________       _______, KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC
 
+#undef  _________________ADJUST_L2_________________
+#define _________________ADJUST_L2_________________       MU_TOG , CK_TOGG, AU_ON,   AU_OFF,  AG_NORM
+
+#undef  _________________ADJUST_L3_________________
+#define _________________ADJUST_L3_________________       RGB_M_P, RGB_SPI, RGB_SAD, RGB_VAD, KC_RGB_T
+
+#undef  _________________ADJUST_R2_________________
+#define _________________ADJUST_R2_________________       AG_SWAP, DEFLYR1, DEFLYR2, DEFLYR3, DEFLYR4

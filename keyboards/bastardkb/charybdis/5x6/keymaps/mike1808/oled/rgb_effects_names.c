@@ -1,0 +1,103 @@
+#include "rgb_matrix.h"
+#include "rgb_effects_names.h"
+
+const char *get_rgb_matrix_anim_text(uint8_t mode) {
+    switch (mode) {
+        case RGB_MATRIX_NONE:
+            return PSTR("NONE");
+        case RGB_MATRIX_SOLID_COLOR:
+            return PSTR("SOLID_COLOR");
+        case RGB_MATRIX_ALPHAS_MODS:
+            return PSTR("ALPHAS_MODS");
+        case RGB_MATRIX_GRADIENT_UP_DOWN:
+            return PSTR("GRADIENT_UP_DOWN");
+        case RGB_MATRIX_GRADIENT_LEFT_RIGHT:
+            return PSTR("GRADIENT_LEFT_RIGHT");
+        case RGB_MATRIX_BREATHING:
+            return PSTR("BREATHING");
+        case RGB_MATRIX_BAND_SAT:
+            return PSTR("BAND_SAT");
+        case RGB_MATRIX_BAND_VAL:
+            return PSTR("BAND_VAL");
+        case RGB_MATRIX_BAND_PINWHEEL_SAT:
+            return PSTR("BAND_PINWHEEL_SAT");
+        case RGB_MATRIX_BAND_PINWHEEL_VAL:
+            return PSTR("BAND_PINWHEEL_VAL");
+        case RGB_MATRIX_BAND_SPIRAL_SAT:
+            return PSTR("BAND_SPIRAL_SAT");
+        case RGB_MATRIX_BAND_SPIRAL_VAL:
+            return PSTR("BAND_SPIRAL_VAL");
+        case RGB_MATRIX_CYCLE_ALL:
+            return PSTR("CYCLE_ALL");
+        case RGB_MATRIX_CYCLE_LEFT_RIGHT:
+            return PSTR("CYCLE_LEFT_RIGHT");
+        case RGB_MATRIX_CYCLE_UP_DOWN:
+            return PSTR("CYCLE_UP_DOWN");
+        case RGB_MATRIX_CYCLE_OUT_IN:
+            return PSTR("CYCLE_OUT_IN");
+        case RGB_MATRIX_CYCLE_OUT_IN_DUAL:
+            return PSTR("CYCLE_OUT_IN_DUAL");
+        case RGB_MATRIX_RAINBOW_MOVING_CHEVRON:
+            return PSTR("RAINBOW_MOVING_CHEVRON");
+        case RGB_MATRIX_CYCLE_PINWHEEL:
+            return PSTR("CYCLE_PINWHEEL");
+        case RGB_MATRIX_CYCLE_SPIRAL:
+            return PSTR("CYCLE_SPIRAL");
+        case RGB_MATRIX_DUAL_BEACON:
+            return PSTR("DUAL_BEACON");
+        case RGB_MATRIX_RAINBOW_BEACON:
+            return PSTR("RAINBOW_BEACON");
+        case RGB_MATRIX_RAINBOW_PINWHEELS:
+            return PSTR("RAINBOW_PINWHEELS");
+        case RGB_MATRIX_RAINDROPS:
+            return PSTR("RAINDROPS");
+        case RGB_MATRIX_JELLYBEAN_RAINDROPS:
+            return PSTR("JELLYBEAN_RAINDROPS");
+        case RGB_MATRIX_HUE_BREATHING:
+            return PSTR("HUE_BREATHING");
+        case RGB_MATRIX_HUE_PENDULUM:
+            return PSTR("HUE_PENDULUM");
+        case RGB_MATRIX_HUE_WAVE:
+            return PSTR("HUE_WAVE");
+        case RGB_MATRIX_PIXEL_FRACTAL:
+            return PSTR("PIXEL_FRACTAL");
+        case RGB_MATRIX_PIXEL_FLOW:
+            return PSTR("PIXEL_FLOW");
+        case RGB_MATRIX_PIXEL_RAIN:
+            return PSTR("PIXEL_RAIN");
+#if defined(RGB_MATRIX_FRAMEBUFFER_EFFECTS)
+        case RGB_MATRIX_TYPING_HEATMAP:
+            return PSTR("TYPING_HEATMAP");
+        case RGB_MATRIX_DIGITAL_RAIN:
+            return PSTR("DIGITAL_RAIN");
+#endif
+#if defined(RGB_MATRIX_KEYPRESSES) || defined(RGB_MATRIX_KEYRELEASES)
+        case RGB_MATRIX_SOLID_REACTIVE_SIMPLE:
+            return PSTR("SOLID_REACTIVE_SIMPLE");
+        case RGB_MATRIX_SOLID_REACTIVE:
+            return PSTR("SOLID_REACTIVE");
+        case RGB_MATRIX_SOLID_REACTIVE_WIDE:
+            return PSTR("SOLID_REACTIVE_WIDE");
+        case RGB_MATRIX_SOLID_REACTIVE_MULTIWIDE:
+            return PSTR("SOLID_REACTIVE_MULTIWIDE");
+        case RGB_MATRIX_SOLID_REACTIVE_CROSS:
+            return PSTR("SOLID_REACTIVE_CROSS");
+        case RGB_MATRIX_SOLID_REACTIVE_MULTICROSS:
+            return PSTR("SOLID_REACTIVE_MULTICROSS");
+        case RGB_MATRIX_SOLID_REACTIVE_NEXUS:
+            return PSTR("SOLID_REACTIVE_NEXUS");
+        case RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS:
+            return PSTR("SOLID_REACTIVE_MULTINEXUS");
+        case RGB_MATRIX_SPLASH:
+            return PSTR("SPLASH");
+        case RGB_MATRIX_MULTISPLASH:
+            return PSTR("MULTISPLASH");
+        case RGB_MATRIX_SOLID_SPLASH:
+            return PSTR("SOLID_SPLASH");
+        case RGB_MATRIX_SOLID_MULTISPLASH:
+            return PSTR("SOLID_MULTISPLASH");
+#endif
+        default:
+            return PSTR("");
+    }
+};
