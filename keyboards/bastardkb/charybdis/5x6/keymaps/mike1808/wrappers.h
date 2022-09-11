@@ -48,3 +48,9 @@ Cinemark
 
 #undef  _________________ADJUST_R2_________________
 #define _________________ADJUST_R2_________________       AG_SWAP, DEFLYR1, DEFLYR2, DEFLYR3, DEFLYR4
+
+#ifdef AUTO_SHIFT_ENABLE
+#define _________________ADJUST_L0_________________       KC_ASDN, KC_ASUP, KC_ASTG, _______, _______
+#else
+#define _________________ADJUST_L0_________________       _______, _______, _______, _______, _______
+#endif // AUTO_SHIFT_ENABLED

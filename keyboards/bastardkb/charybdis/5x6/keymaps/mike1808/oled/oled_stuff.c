@@ -38,10 +38,12 @@ uint32_t        oled_timer                        = 0;
 char            keylog_str[OLED_KEYLOGGER_LENGTH] = {0};
 static uint16_t log_timer                         = 0;
 uint32_t        rgb_effect_timer                  = 0;
+uint32_t        autoshift_timer                   = 0;
 
 enum oled_render_mode {
     OLED_RENDER_LAYER_DEFAULT = 0,
     OLED_RENDER_LAYER_RGB     = 1,
+    OLED_RENDER_LAYER_AUTOSHIFT,
     OLED_RENDER_LAYER_LAST,
 };
 
@@ -117,9 +119,16 @@ bool process_record_user_oled(uint16_t keycode, keyrecord_t *record) {
         add_keylog(keycode, record);
 #endif
         switch (keycode) {
+#ifdef RGB_MATRIX_ENABLE
             case RGB_TOG ... RGB_MODE_RGBTEST:
                 rgb_effect_timer = timer_read32();
                 break;
+#endif
+#ifdef AUTO_SHIFT_ENABLE
+            case KC_ASUP ... KC_ASOFF:
+                autoshift_timer = timer_read32();
+                break;
+#endif
         }
     }
     return true;
@@ -630,13 +639,18 @@ void render_current_mode(void) {
         case OLED_RENDER_LAYER_RGB:
             render_mode_rgb();
             break;
+        case OLED_RENDER_LAYER_AUTOSHIFT:
+            render_auto_shift(0, 0);
+            break;
     }
 }
 
 void render_status_left(void) {
     int new_mode = current_render_mode;
-    if (rgb_effect_timer != 0 && timer_elapsed32(rgb_effect_timer) < OLED_RENDER_RGB_EFFECT_NAME_TIMEOUT) {
+    if (rgb_effect_timer != 0 && timer_elapsed32(rgb_effect_timer) < OLED_DEFAULT_LAYER_TIMEOUT) {
         new_mode = OLED_RENDER_LAYER_RGB;
+    } else if (autoshift_timer != 0 && timer_elapsed32(autoshift_timer) < OLED_DEFAULT_LAYER_TIMEOUT) {
+        new_mode = OLED_RENDER_LAYER_AUTOSHIFT;
     } else {
         new_mode = OLED_RENDER_LAYER_DEFAULT;
     }
@@ -684,6 +698,30 @@ void render_rgb_effect(uint8_t col, uint8_t line) {
     oled_advance_char();
     oled_write(get_u8_str(speed, ' '), false);
     oled_set_cursor(col, ++line);
+}
+
+void render_auto_shift(uint8_t col, uint8_t line) {
+#ifdef AUTO_SHIFT_ENABLE
+    oled_set_cursor(col, line);
+
+    oled_write_P(PSTR("AUTO "), true);
+    oled_write_P(PSTR("SHIFT"), true);
+    line += 2;
+    oled_set_cursor(col, ++line);
+
+    uint16_t timeout = get_generic_autoshift_timeout();
+    bool     enabled = get_autoshift_state();
+
+    if (!enabled) {
+        oled_write_P(PSTR(" OFF "), false);
+        return;
+    }
+
+    oled_write_P(PSTR(" ON  "), true);
+    oled_set_cursor(col, ++line);
+    oled_set_cursor(col, ++line);
+    oled_write(get_u16_str(timeout, ' '), false);
+#endif // AUTO_SHIFT_ENABLE
 }
 
 __attribute__((weak)) oled_rotation_t oled_init_keymap(oled_rotation_t rotation) {
