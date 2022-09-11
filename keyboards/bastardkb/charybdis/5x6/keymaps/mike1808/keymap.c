@@ -39,7 +39,7 @@ enum {
      LALT_T(KC_ESC), K11, K12,  K13,     K14,     K15,                K16,     K17,     K18,     K19,     K1A,     RALT_T(K1B), \
      OS_LSFT, CTL_T(K21), K22,  K23,     K24,     K25,                K26,     K27,     K28,     K29, RCTL_T(K2A), OS_RSFT, \
                        OS_LGUI, OS_LALT,                                                OS_RALT, OS_RGUI, \
-                                BK_LWER, KC_SPC,                                        DL_RAIS,  \
+                                KC_SPC, BK_LWER,                                        DL_RAIS,  \
                                          KC_ESC,   KC_CCCV,                     KC_ENT,  \
                                          KC_MUTE, TT(_MOUSE),      TT(_MOUSE), DRGSCRL  \
   )
@@ -58,7 +58,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, _______, DRGSCRL, _______,                        KC_WH_D, KC_BTN1, KC_BTN3, KC_BTN2, KC_BTN6, SNIPING,
         _______, _______, _______, _______, SNIPING, _______,                        KC_BTN7, KC_BTN4, KC_BTN5, KC_BTN8, _______, _______,
                           _______, _______,                                                            _______, _______,
-                                            KC_BTN2, KC_BTN1,                                 KC_BTN3,
+                                            _______, _______,                                 KC_BTN3,
                                                      _______, _______,               _______,
                                                      _______, _______,      _______, _______
     ),

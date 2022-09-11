@@ -32,7 +32,13 @@ Cinemark
 #undef _________________RAISE_R2__________________ 
 #define _________________RAISE_R2__________________       KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______
 #undef _________________RAISE_R3__________________
-#define _________________RAISE_R3__________________       _______, KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC
+#define _________________RAISE_R3__________________       KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, _______ 
+
+#undef _________________LOWER_R2__________________
+#undef _________________LOWER_R3__________________
+
+#define _________________LOWER_R2__________________       _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END
+#define _________________LOWER_R3__________________       KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, _______ 
 
 #undef  _________________ADJUST_L2_________________
 #define _________________ADJUST_L2_________________       MU_TOG , CK_TOGG, AU_ON,   AU_OFF,  AG_NORM
