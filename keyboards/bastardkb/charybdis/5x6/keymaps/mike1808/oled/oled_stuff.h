@@ -38,6 +38,7 @@ void            render_rgb_hsv(uint8_t col, uint8_t line);
 void            render_mouse_mode(uint8_t col, uint8_t line);
 void            render_rgb_effect(uint8_t col, uint8_t line);
 void            matrix_scan_oled(void);
+void            render_auto_shift(uint8_t col, uint8_t line);
 
 void oled_pan_section(bool left, uint16_t y_start, uint16_t y_end, uint16_t x_start, uint16_t x_end);
 
@@ -106,4 +107,4 @@ extern char keylog_str[OLED_KEYLOGGER_LENGTH];
 #    define OLED_WPM_GRAPH_GRAPH_LINE_THICKNESS 2
 #endif
 
-#define OLED_RENDER_RGB_EFFECT_NAME_TIMEOUT 3000
+#define OLED_DEFAULT_LAYER_TIMEOUT 3000
