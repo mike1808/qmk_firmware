@@ -114,6 +114,8 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
 void keyboard_post_init_keymap(void) {
     // debug_enable = true;
     // debug_mouse  = true;
+
+    // pimoroni_trackball_set_rgbw(0, 0, 0, 255);
 }
 
 // Tap Dance definitions
