@@ -79,7 +79,7 @@ void oled_pan_section(bool left, uint16_t y_start, uint16_t y_end, uint16_t x_st
 #define OLED_RENDER_BOOTMAGIC_NKRO "NK"
 #define OLED_RENDER_BOOTMAGIC_GRV "GRV"
 #define OLED_RENDER_BOOTMAGIC_ONESHOT "1S"
-#define OLED_RENDER_BOOTMAGIC_SWAP "SWAP"
+#define OLED_RENDER_BOOTMAGIC_SWAP "SW"
 #define OLED_RENDER_BOOTMAGIC_CAPS "CAPS"
 
 #define OLED_RENDER_USER_NAME "USER:"
