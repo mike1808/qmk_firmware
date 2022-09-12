@@ -39,7 +39,6 @@ Cinemark
 
 #define _________________LOWER_R2__________________       _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END
 #define _________________LOWER_R3__________________       KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, _______ 
-
 #undef  _________________ADJUST_L2_________________
 #define _________________ADJUST_L2_________________       MU_TOG , CK_TOGG, AU_ON,   AU_OFF,  AG_NORM
 
@@ -49,7 +48,7 @@ Cinemark
 #undef  _________________ADJUST_R2_________________
 #define _________________ADJUST_R2_________________       AG_SWAP, DEFLYR1, DEFLYR2, DEFLYR3, DEFLYR4
 
-#ifdef AUTO_SHIFT_ENABLE
+#if defined(AUTO_SHIFT_ENABLE) && !defined(AUTO_SHIFT_NO_SETUP)
 #define _________________ADJUST_L0_________________       KC_ASDN, KC_ASUP, KC_ASTG, _______, _______
 #else
 #define _________________ADJUST_L0_________________       _______, _______, _______, _______, _______
