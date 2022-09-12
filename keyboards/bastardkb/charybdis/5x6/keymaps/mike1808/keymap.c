@@ -26,6 +26,10 @@ enum {
 
 #define ESC_TAB TD(TD_ESC_TAB)
 
+enum my_keycodes {
+    MEDIAMODE = SAFE_RANGE,
+};
+
 // clang-format off
 #define LAYOUT_charybdis_5x6_wrapper(...) LAYOUT_charybdis_5x6(__VA_ARGS__)
 #define LAYOUT_charybdis_5x6_base( \
@@ -40,8 +44,8 @@ enum {
      OS_LSFT, CTL_T(K21), K22,  K23,     K24,     K25,                K26,     K27,     K28,     K29, RCTL_T(K2A), OS_RSFT, \
                        OS_LGUI, OS_LALT,                                                OS_RALT, OS_RGUI, \
                                 KC_SPC, BK_LWER,                                        DL_RAIS,  \
-                                         KC_ESC,   KC_CCCV,                     KC_ENT,  \
-                                         KC_MUTE, TT(_MOUSE),      TT(_MOUSE), DRGSCRL  \
+                                         SH_TT,   KC_CCCV,                     KC_ENT,  \
+                                         KC_MUTE, TT(_MOUSE),      TT(_MOUSE), MEDIAMODE  \
   )
 #define LAYOUT_base_wrapper(...)       LAYOUT_charybdis_5x6_base(__VA_ARGS__)
 
@@ -59,7 +63,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, _______, SNIPING, _______,                        KC_BTN7, KC_BTN4, KC_BTN5, KC_BTN8, _______, _______,
                           _______, _______,                                                            _______, _______,
                                             _______, _______,                                 KC_BTN3,
-                                                     _______, _______,               _______,
+                                                    KC_ACCEL, _______,               _______,
                                                      _______, _______,      _______, _______
     ),
     [_LOWER] = LAYOUT_charybdis_5x6_wrapper(
@@ -79,7 +83,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _________________RAISE_L3__________________,                        _________________RAISE_R3__________________, _______,
                           _______, _______,                                                            _______, _______,
                                             _______, _______,                                 _______,
-                                                     _______, _______,               _______,
+                                                     _______, _______,               TT(_MEDIA),
                                                      _______, _______,      _______, _______
     ),
     [_ADJUST] = LAYOUT_charybdis_5x6_wrapper(
@@ -101,12 +105,24 @@ oled_rotation_t oled_init_keymap(oled_rotation_t rotation) {
 }
 #endif // OLED_ENABLE
 
+static bool is_media_mode = false;
+
 bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
 #if defined(OLED_ENABLE)
     if (!process_record_user_oled(keycode, record)) {
         return false;
     }
 #endif // OLED_ENABLE
+    switch (keycode) {
+        case MEDIAMODE:
+            is_media_mode = record->event.pressed;
+            if (is_media_mode) {
+                pointing_device_set_cpi(200);
+            } else {
+                pointing_device_set_cpi(charybdis_get_pointer_default_dpi());
+            }
+            break;
+    }
 
     return true;
 }
@@ -123,3 +139,37 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     // Tap once for Escape, twice for Caps Lock
     [TD_ESC_TAB] = ACTION_TAP_DANCE_DOUBLE(KC_TAB, KC_ESC),
 };
+
+report_mouse_t pointing_device_task_keymap(report_mouse_t mouse_report) {
+    mouse_xy_report_t x = mouse_report.x, y = mouse_report.y;
+
+    static int mouse_x_buffer = 0, mouse_y_buffer = 0;
+
+    if (is_media_mode && (x != 0 || y != 0)) {
+        mouse_report.x = mouse_report.y = 0;
+
+        mouse_x_buffer += x;
+        mouse_y_buffer += y;
+
+        if (abs(mouse_y_buffer) > 100) {
+            if (mouse_y_buffer > 0) {
+                tap_code(KC_VOLU);
+            } else {
+                tap_code(KC_VOLD);
+            }
+
+            mouse_y_buffer = 0;
+        }
+
+        if (abs(mouse_x_buffer) > 100) {
+            if (mouse_x_buffer > 0) {
+                tap_code(KC_MEDIA_FAST_FORWARD);
+            } else {
+                tap_code(KC_MEDIA_REWIND);
+            }
+
+            mouse_x_buffer = 0;
+        }
+    }
+    return mouse_report;
+}

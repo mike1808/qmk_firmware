@@ -390,9 +390,15 @@ void render_bootmagic_status(uint8_t col, uint8_t line) {
         oled_write_P(logo[0][0], false);
     }
 
+#ifdef SWAP_HANDS_ENABLE
+    oled_write_P(PSTR(" "), false);
+    oled_write_P(PSTR(OLED_RENDER_BOOTMAGIC_SWAP), swap_hands);
+    oled_write_P(PSTR(" "), false);
+#else
     oled_write_P(PSTR(" "), false);
     oled_write_P(PSTR(OLED_RENDER_BOOTMAGIC_NKRO), keymap_config.nkro);
     oled_write_P(PSTR(" "), false);
+#endif
 
 #if defined(AUTOCORRECTION_ENABLE) || defined(AUTOCORRECT_ENABLE)
     oled_write_P(PSTR("CRCT"), autocorrect_is_enabled());
