@@ -9,13 +9,13 @@ AUTOCORRECTION_ENABLE  = no
 KEYLOGGER_ENABLE       = no
 
 # generic
-TAP_DANCE_ENABLE      = yes
+TAP_DANCE_ENABLE      = no
 SWAP_HANDS_ENABLE     = yes
 CAPS_WORD_ENABLE      = yes
 WPM_ENABLE            = yes
+
 OLED_ENABLE           = yes
 AUTO_SHIFT_ENABLE     = yes
-
 ifeq ($(strip $(OLED_ENABLE)), yes)
 SRC += oled/oled_stuff.c
 SRC += oled/rgb_effects_names.c
