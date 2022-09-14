@@ -20,12 +20,6 @@
 #    include "oled/oled_stuff.h"
 #endif // OLED_ENABLE
 
-enum {
-    TD_ESC_TAB,
-};
-
-#define ESC_TAB TD(TD_ESC_TAB)
-
 enum my_keycodes {
     MEDIAMODE = SAFE_RANGE,
 };
@@ -45,7 +39,7 @@ enum my_keycodes {
                        OS_LGUI, OS_LALT,                                                OS_RALT, OS_RGUI, \
                                 KC_SPC, BK_LWER,                                        DL_RAIS,  \
                                          SH_TT,   KC_CCCV,                     KC_ENT,  \
-                                         KC_MUTE, TT(_MOUSE),      TT(_MOUSE), MEDIAMODE  \
+                                         KC_MUTE, TT(_MOUSE),      TT(_MOUSE), MO(_MEDIA) \
   )
 #define LAYOUT_base_wrapper(...)       LAYOUT_charybdis_5x6_base(__VA_ARGS__)
 
@@ -66,6 +60,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                     KC_ACCEL, _______,               _______,
                                                      _______, _______,      _______, _______
     ),
+
     [_LOWER] = LAYOUT_charybdis_5x6_wrapper(
         KC_F12,  _________________FUNC_LEFT_________________,                        _________________FUNC_RIGHT________________, KC_F11,
         _______, _________________LOWER_L1__________________,                        _________________LOWER_R1__________________, _______,
@@ -91,10 +86,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
           VRSN, _________________ADJUST_L1_________________,                        _________________ADJUST_R1_________________,  EE_CLR,
        KEYLOCK, _________________ADJUST_L2_________________,                        _________________ADJUST_R2_________________,  TG_MODS,
        _______, _________________ADJUST_L3_________________,                        _________________ADJUST_R3_________________,  KC_MPLY,
-                           DEBUG, _______,                                                            _______, _______,
+                           DEBUG, _______,                                                            OS_TOGG, _______,
                                             _______, QK_RBT,                                  KC_NUKE,
                                                      _______, _______,               _______,
                                                      _______, _______,      KC_NUKE, _______
+    ),
+
+    [_MEDIA] = LAYOUT_charybdis_5x6(
+        _______, _______, _______, _______, _______, _______,                        _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______,                        _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______,                        _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______,                        KC_MPRV, KC_MPLY, KC_MNXT, KC_VOLD, KC_MUTE, KC_VOLU,
+                          _______, _______,                                                            _______, _______,
+                                            _______, _______,                                 _______,
+                                                     _______, _______,               _______,
+                                                     _______, _______,      _______, _______
     ),
 };
 // clang-format on
@@ -105,7 +111,14 @@ oled_rotation_t oled_init_keymap(oled_rotation_t rotation) {
 }
 #endif // OLED_ENABLE
 
-static bool is_media_mode = false;
+layer_state_t layer_state_set_keymap(layer_state_t state) {
+    if (layer_state_cmp(state, _MEDIA)) {
+        pointing_device_set_cpi(200);
+    } else {
+        pointing_device_set_cpi(charybdis_get_pointer_default_dpi());
+    }
+    return state;
+}
 
 bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
 #if defined(OLED_ENABLE)
@@ -113,17 +126,6 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
         return false;
     }
 #endif // OLED_ENABLE
-    switch (keycode) {
-        case MEDIAMODE:
-            is_media_mode = record->event.pressed;
-            if (is_media_mode) {
-                pointing_device_set_cpi(200);
-            } else {
-                pointing_device_set_cpi(charybdis_get_pointer_default_dpi());
-            }
-            break;
-    }
-
     return true;
 }
 
@@ -134,24 +136,18 @@ void keyboard_post_init_keymap(void) {
     // pimoroni_trackball_set_rgbw(0, 0, 0, 255);
 }
 
-// Tap Dance definitions
-qk_tap_dance_action_t tap_dance_actions[] = {
-    // Tap once for Escape, twice for Caps Lock
-    [TD_ESC_TAB] = ACTION_TAP_DANCE_DOUBLE(KC_TAB, KC_ESC),
-};
-
 report_mouse_t pointing_device_task_keymap(report_mouse_t mouse_report) {
     mouse_xy_report_t x = mouse_report.x, y = mouse_report.y;
 
     static int mouse_x_buffer = 0, mouse_y_buffer = 0;
 
-    if (is_media_mode && (x != 0 || y != 0)) {
+    if (layer_state_is(_MEDIA) && (x != 0 || y != 0)) {
         mouse_report.x = mouse_report.y = 0;
 
         mouse_x_buffer += x;
         mouse_y_buffer += y;
 
-        if (abs(mouse_y_buffer) > 100) {
+        if (abs(mouse_y_buffer) > TRACKBALL_MEDIA_BUFFER) {
             if (mouse_y_buffer > 0) {
                 tap_code(KC_VOLU);
             } else {
@@ -161,11 +157,11 @@ report_mouse_t pointing_device_task_keymap(report_mouse_t mouse_report) {
             mouse_y_buffer = 0;
         }
 
-        if (abs(mouse_x_buffer) > 100) {
+        if (abs(mouse_x_buffer) > TRACKBALL_MEDIA_BUFFER) {
             if (mouse_x_buffer > 0) {
-                tap_code(KC_MEDIA_FAST_FORWARD);
+                tap_code(KC_RIGHT);
             } else {
-                tap_code(KC_MEDIA_REWIND);
+                tap_code(KC_LEFT);
             }
 
             mouse_x_buffer = 0;
