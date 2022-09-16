@@ -390,15 +390,9 @@ void render_bootmagic_status(uint8_t col, uint8_t line) {
         oled_write_P(logo[0][0], false);
     }
 
-#ifdef SWAP_HANDS_ENABLE
-    oled_write_P(PSTR(" "), false);
-    oled_write_P(PSTR(OLED_RENDER_BOOTMAGIC_SWAP), swap_hands);
-    oled_write_P(PSTR(" "), false);
-#else
     oled_write_P(PSTR(" "), false);
     oled_write_P(PSTR(OLED_RENDER_BOOTMAGIC_NKRO), keymap_config.nkro);
     oled_write_P(PSTR(" "), false);
-#endif
 
 #if defined(AUTOCORRECTION_ENABLE) || defined(AUTOCORRECT_ENABLE)
     oled_write_P(PSTR("CRCT"), autocorrect_is_enabled());
@@ -634,6 +628,7 @@ void render_mode_default(void) {
 }
 
 void render_mode_rgb(void) {
+    oled_clear();
     render_rgb_effect(0, 0);
 }
 
@@ -673,15 +668,24 @@ void render_status_left(void) {
 void render_rgb_effect(uint8_t col, uint8_t line) {
     oled_set_cursor(col, line);
 
-    uint8_t mode  = rgb_matrix_get_mode();
-    HSV     hsv   = rgb_matrix_get_hsv();
-    uint8_t speed = rgb_matrix_get_speed();
+    bool    enabled = rgb_matrix_is_enabled();
+    uint8_t mode    = rgb_matrix_get_mode();
+    HSV     hsv     = rgb_matrix_get_hsv();
+    uint8_t speed   = rgb_matrix_get_speed();
 
     oled_write_P(PSTR(" RGB "), true);
     oled_set_cursor(col, ++line);
+
+    if (!enabled) {
+        oled_set_cursor(col, ++line);
+        oled_write_P(PSTR(" OFF "), true);
+        return;
+    }
+
     oled_write(get_u8_str(mode, ' '), false);
     line++;
     oled_set_cursor(col, ++line);
+
     oled_write_P(get_rgb_matrix_anim_text(mode), false);
 
     line += 7;
