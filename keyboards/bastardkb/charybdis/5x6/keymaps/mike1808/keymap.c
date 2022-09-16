@@ -39,7 +39,7 @@ enum my_keycodes {
                        OS_LGUI, OS_LALT,                                                OS_RALT, OS_RGUI, \
                                 KC_SPC, BK_LWER,                                        DL_RAIS,  \
                                          SH_TT,   KC_CCCV,                     KC_ENT,  \
-                                         KC_MUTE, TT(_MOUSE),      TT(_MOUSE), MO(_MEDIA) \
+                                         KC_MUTE, TT(_MOUSE),      TT(_MOUSE), TT(_MEDIA) \
   )
 #define LAYOUT_base_wrapper(...)       LAYOUT_charybdis_5x6_base(__VA_ARGS__)
 
@@ -52,24 +52,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_MOUSE] = LAYOUT_charybdis_5x6(
         _______, _______, _______, _______, _______, _______,                        DRGSCRL, DPI_RMOD,DPI_MOD, S_D_RMOD,S_D_MOD, SNP_TOG,
-        _______, _______, _______, _______, _______, _______,                        KC_WH_U, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, DRGSCRL, _______,                        KC_WH_D, KC_BTN1, KC_BTN3, KC_BTN2, KC_BTN6, SNIPING,
-        _______, _______, _______, _______, SNIPING, _______,                        KC_BTN7, KC_BTN4, KC_BTN5, KC_BTN8, _______, _______,
+        _______, _______, _______, _______, _______, _______,                        KC_WH_U, _______, _______, _______, _______, DRG_TOG,
+        _______, _______, _______, _______, _______, _______,                        KC_WH_D, KC_BTN1, KC_BTN3, KC_BTN2, KC_BTN6, SNIPING,
+        _______, _______, _______, _______, _______, _______,                        KC_BTN7, KC_BTN4, KC_BTN5, KC_BTN8, _______, _______,
                           _______, _______,                                                            _______, _______,
-                                            _______, _______,                                 KC_BTN3,
+                                            DRGSCRL, SNIPING,                                 KC_BTN3,
                                                     KC_ACCEL, _______,               _______,
-                                                     _______, _______,      _______, _______
+                                                     DRG_TOG, _______,      _______, _______
     ),
 
     [_LOWER] = LAYOUT_charybdis_5x6_wrapper(
         KC_F12,  _________________FUNC_LEFT_________________,                        _________________FUNC_RIGHT________________, KC_F11,
         _______, _________________LOWER_L1__________________,                        _________________LOWER_R1__________________, _______,
         _______, _________________LOWER_L2__________________,                        _________________LOWER_R2__________________, KC_PIPE,
-        _______, _________________LOWER_L3__________________,                        _________________LOWER_R3__________________, _______,
+     TT(_MEDIA), _________________LOWER_L3__________________,                        _________________LOWER_R3__________________, _______,
                           _______, _______,                                                            _______, _______,
                                             _______, _______,                                 _______,
-                                                     KC_MPRV, KC_MNXT,               _______,
-                                                     _______, KC_MPLY,      _______, _______
+                                                     _______, _______,               _______,
+                                                     _______, _______,      _______, _______
     ),
     [_RAISE] = LAYOUT_charybdis_5x6_wrapper(
         KC_F12,  _________________FUNC_LEFT_________________,                        _________________FUNC_RIGHT________________, KC_F11,
@@ -78,7 +78,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _________________RAISE_L3__________________,                        _________________RAISE_R3__________________, _______,
                           _______, _______,                                                            _______, _______,
                                             _______, _______,                                 _______,
-                                                     _______, _______,               TT(_MEDIA),
+                                                     _______, _______,               _______,
                                                      _______, _______,      _______, _______
     ),
     [_ADJUST] = LAYOUT_charybdis_5x6_wrapper(
@@ -145,7 +145,11 @@ report_mouse_t pointing_device_task_keymap(report_mouse_t mouse_report) {
         mouse_report.x = mouse_report.y = 0;
 
         mouse_x_buffer += x;
+#ifndef TRACKBALL_MEDIA_INVERT_Y
         mouse_y_buffer += y;
+#else
+        mouse_y_buffer -= y;
+#endif
 
         if (abs(mouse_y_buffer) > TRACKBALL_MEDIA_BUFFER) {
             if (mouse_y_buffer > 0) {
