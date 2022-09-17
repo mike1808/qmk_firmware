@@ -139,12 +139,14 @@ void keyboard_post_init_keymap(void) {
 report_mouse_t pointing_device_task_keymap(report_mouse_t mouse_report) {
     mouse_xy_report_t x = mouse_report.x, y = mouse_report.y;
 
-    static int mouse_x_buffer = 0, mouse_y_buffer = 0;
+#ifdef TRACKBALL_MEDIA_X_ARROWS
+    static int mouse_x_buffer = 0;
+#endif
+    static int mouse_y_buffer = 0;
 
     if (layer_state_is(_MEDIA) && (x != 0 || y != 0)) {
         mouse_report.x = mouse_report.y = 0;
 
-        mouse_x_buffer += x;
 #ifndef TRACKBALL_MEDIA_INVERT_Y
         mouse_y_buffer += y;
 #else
@@ -161,6 +163,8 @@ report_mouse_t pointing_device_task_keymap(report_mouse_t mouse_report) {
             mouse_y_buffer = 0;
         }
 
+#ifdef TRACKBALL_MEDIA_X_ARROWS
+        mouse_x_buffer += x;
         if (abs(mouse_x_buffer) > TRACKBALL_MEDIA_BUFFER) {
             if (mouse_x_buffer > 0) {
                 tap_code(KC_RIGHT);
@@ -170,6 +174,8 @@ report_mouse_t pointing_device_task_keymap(report_mouse_t mouse_report) {
 
             mouse_x_buffer = 0;
         }
+#endif
     }
+
     return mouse_report;
 }
