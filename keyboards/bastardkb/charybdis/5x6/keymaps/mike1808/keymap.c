@@ -20,10 +20,6 @@
 #    include "oled/oled_stuff.h"
 #endif // OLED_ENABLE
 
-enum my_keycodes {
-    MEDIAMODE = SAFE_RANGE,
-};
-
 // clang-format off
 #define LAYOUT_charybdis_5x6_wrapper(...) LAYOUT_charybdis_5x6(__VA_ARGS__)
 #define LAYOUT_charybdis_5x6_base( \
@@ -39,7 +35,7 @@ enum my_keycodes {
                        OS_LGUI, OS_LALT,                                                OS_RALT, OS_RGUI, \
                                 KC_SPC, BK_LWER,                                        DL_RAIS,  \
                                          SH_TT,   KC_CCCV,                     KC_ENT,  \
-                                         KC_MUTE, TT(_MOUSE),      TT(_MOUSE), TT(_MEDIA) \
+                                         KC_MUTE, TT(_MOUSE),      TT(_MOUSE), MO(_MEDIA) \
   )
 #define LAYOUT_base_wrapper(...)       LAYOUT_charybdis_5x6_base(__VA_ARGS__)
 
@@ -51,21 +47,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     [_MOUSE] = LAYOUT_charybdis_5x6(
-        _______, _______, _______, _______, _______, _______,                        DRGSCRL, DPI_RMOD,DPI_MOD, S_D_RMOD,S_D_MOD, SNP_TOG,
-        _______, _______, _______, _______, _______, _______,                        KC_WH_U, _______, _______, _______, _______, DRG_TOG,
-        _______, _______, _______, _______, _______, _______,                        KC_WH_D, KC_BTN1, KC_BTN3, KC_BTN2, KC_BTN6, SNIPING,
-        _______, _______, _______, _______, _______, _______,                        KC_BTN7, KC_BTN4, KC_BTN5, KC_BTN8, _______, _______,
+        _______, _______, _______, _______, _______, _______,                        _______, DPI_RMOD,DPI_MOD, S_D_RMOD,S_D_MOD, SNP_TOG,
+        _______, _______, _______, _______, _______, _______,                        _______, _______, _______, _______, _______, DRG_TOG,
+        _______, _______, _______, _______, _______, _______,                        DRGSCRL, KC_BTN1, KC_BTN3, KC_BTN2, _______, _______,
+        _______, _______, _______, _______, _______, _______,                        SNIPING, _______, _______, _______, _______, _______,
                           _______, _______,                                                            _______, _______,
-                                            DRGSCRL, SNIPING,                                 KC_BTN3,
+                                            DRGSCRL, SNIPING,                                 _______,
                                                     KC_ACCEL, _______,               _______,
                                                      DRG_TOG, _______,      _______, _______
     ),
 
     [_LOWER] = LAYOUT_charybdis_5x6_wrapper(
-        KC_F12,  _________________FUNC_LEFT_________________,                        _________________FUNC_RIGHT________________, KC_F11,
-        _______, _________________LOWER_L1__________________,                        _________________LOWER_R1__________________, _______,
+         KC_F12, _________________FUNC_LEFT_________________,                        _________________FUNC_RIGHT________________, KC_F11,
+     MO(_MEDIA), _________________LOWER_L1__________________,                        _________________LOWER_R1__________________, _______,
         _______, _________________LOWER_L2__________________,                        _________________LOWER_R2__________________, KC_PIPE,
-     TT(_MEDIA), _________________LOWER_L3__________________,                        _________________LOWER_R3__________________, _______,
+        _______, _________________LOWER_L3__________________,                        _________________LOWER_R3__________________, _______,
                           _______, _______,                                                            _______, _______,
                                             _______, _______,                                 _______,
                                                      _______, _______,               _______,
@@ -73,7 +69,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [_RAISE] = LAYOUT_charybdis_5x6_wrapper(
         KC_F12,  _________________FUNC_LEFT_________________,                        _________________FUNC_RIGHT________________, KC_F11,
-        KC_GRV,  _________________RAISE_L1__________________,                        _________________RAISE_R1__________________, _______,
+        KC_GRV,  _________________RAISE_L1__________________,                        _________________RAISE_R1__________________, KC_PSCR,
         _______, _________________RAISE_L2__________________,                        _________________RAISE_R2__________________, KC_BSLS,
         _______, _________________RAISE_L3__________________,                        _________________RAISE_R3__________________, _______,
                           _______, _______,                                                            _______, _______,
@@ -136,24 +132,22 @@ void keyboard_post_init_keymap(void) {
     // pimoroni_trackball_set_rgbw(0, 0, 0, 255);
 }
 
+#define ABS(x) ((x) < 0 ? (-x) : (x))
+
 report_mouse_t pointing_device_task_keymap(report_mouse_t mouse_report) {
     mouse_xy_report_t x = mouse_report.x, y = mouse_report.y;
 
-#ifdef TRACKBALL_MEDIA_X_ARROWS
-    static int mouse_x_buffer = 0;
-#endif
     static int mouse_y_buffer = 0;
 
     if (layer_state_is(_MEDIA) && (x != 0 || y != 0)) {
         mouse_report.x = mouse_report.y = 0;
-
 #ifndef TRACKBALL_MEDIA_INVERT_Y
         mouse_y_buffer += y;
 #else
         mouse_y_buffer -= y;
 #endif
 
-        if (abs(mouse_y_buffer) > TRACKBALL_MEDIA_BUFFER) {
+        if (ABS(mouse_y_buffer) > TRACKBALL_MEDIA_BUFFER) {
             if (mouse_y_buffer > 0) {
                 tap_code(KC_VOLU);
             } else {
@@ -162,19 +156,6 @@ report_mouse_t pointing_device_task_keymap(report_mouse_t mouse_report) {
 
             mouse_y_buffer = 0;
         }
-
-#ifdef TRACKBALL_MEDIA_X_ARROWS
-        mouse_x_buffer += x;
-        if (abs(mouse_x_buffer) > TRACKBALL_MEDIA_BUFFER) {
-            if (mouse_x_buffer > 0) {
-                tap_code(KC_RIGHT);
-            } else {
-                tap_code(KC_LEFT);
-            }
-
-            mouse_x_buffer = 0;
-        }
-#endif
     }
 
     return mouse_report;
