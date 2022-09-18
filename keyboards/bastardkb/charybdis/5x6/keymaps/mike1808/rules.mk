@@ -16,7 +16,7 @@ WPM_ENABLE            = yes
 MOUSEKEY_ENABLE       = yes
 
 OLED_ENABLE           = yes
-AUTO_SHIFT_ENABLE     = yes
+AUTO_SHIFT_ENABLE     = no
 ifeq ($(strip $(OLED_ENABLE)), yes)
 SRC += oled/oled_stuff.c
 SRC += oled/rgb_effects_names.c
