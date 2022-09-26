@@ -21,9 +21,6 @@
 #    include "process_unicode_common.h"
 #    include "keyrecords/unicode.h"
 #endif
-#if defined(AUTOCORRECTION_ENABLE)
-#    include "keyrecords/autocorrection/autocorrection.h"
-#endif
 #include <string.h>
 
 #include "rgb_effects_names.h"
@@ -411,19 +408,15 @@ void render_bootmagic_status(uint8_t col, uint8_t line) {
     oled_write_P(PSTR(OLED_RENDER_BOOTMAGIC_ONESHOT), is_oneshot_enabled());
 }
 
-#if defined(CUSTOM_POINTING_DEVICE)
-extern bool tap_toggling;
-#endif
-
 void render_user_status(uint8_t col, uint8_t line) {
     oled_set_cursor(col, line);
 
     oled_write_P(PSTR(OLED_RENDER_USER_ANIM), userspace_config.rgb_matrix_idle_anim);
     oled_write_P(PSTR(" "), false);
 
-#if defined(CUSTOM_POINTING_DEVICE)
+#if defined(POINTING_DEVICE_ENABLE) && defined(POINTING_DEVICE_AUTO_MOUSE_ENABLE)
     static const char PROGMEM mouse_lock[3] = {0xF2, 0xF3, 0};
-    oled_write_P(mouse_lock, tap_toggling);
+    oled_write_P(mouse_lock, get_auto_mouse_toggle());
 #endif
 
     static const char PROGMEM rgb_layer_status[2][3] = {{0xEE, 0xEF, 0}, {0xF0, 0xF1, 0}};
@@ -588,8 +581,8 @@ void render_mouse_mode(uint8_t col, uint8_t line) {
     if (layer_state_is(_MOUSE)) {
         image_index = 1;
 
-#    if defined(CUSTOM_POINTING_DEVICE)
-        if (tap_toggling) {
+#    if defined(POINTING_DEVICE_ENABLE) && defined(POINTING_DEVICE_AUTO_MOUSE_ENABLE)
+        if (get_auto_mouse_toggle()) {
             image_index = 2;
         }
 #    endif
