@@ -21,13 +21,13 @@
 #endif // OLED_ENABLE
 
 // clang-format off
-#define LAYOUT_charybdis_5x6_wrapper(...) LAYOUT_charybdis_5x6(__VA_ARGS__)
-#define LAYOUT_charybdis_5x6_base( \
+#define LAYOUT_wrapper(...) LAYOUT(__VA_ARGS__)
+#define LAYOUT_base( \
     K01, K02, K03, K04, K05, K06, K07, K08, K09, K0A, K0B, \
     K11, K12, K13, K14, K15, K16, K17, K18, K19, K1A, K1B, \
     K21, K22, K23, K24, K25, K26, K27, K28, K29, K2A  \
   ) \
-  LAYOUT_charybdis_5x6_wrapper( \
+  LAYOUT_wrapper( \
      KC_GRV,  ________________NUMBER_LEFT________________,            ________________NUMBER_RIGHT_______________, KC_MINS, \
      KC_TAB,   K01,    K02,     K03,     K04,     K05,                K06,     K07,     K08,     K09,     K0A,     K0B, \
      LALT_T(KC_ESC), K11, K12,  K13,     K14,     K15,                K16,     K17,     K18,     K19,     K1A,     RALT_T(K1B), \
@@ -37,7 +37,7 @@
                                          SH_TT,   KC_CCCV,                     KC_ENT,  \
                                          KC_MUTE, TT(_MOUSE),      TT(_MOUSE), MO(_MEDIA) \
   )
-#define LAYOUT_base_wrapper(...)       LAYOUT_charybdis_5x6_base(__VA_ARGS__)
+#define LAYOUT_base_wrapper(...)       LAYOUT_base(__VA_ARGS__)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_DEFAULT_LAYER_1] = LAYOUT_base_wrapper(
@@ -46,18 +46,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _________________QWERTY_L3_________________, _________________QWERTY_R3_________________
     ),
 
-    [_MOUSE] = LAYOUT_charybdis_5x6(
+    [_MOUSE] = LAYOUT(
         _______, _______, _______, _______, _______, _______,                        _______, DPI_RMOD,DPI_MOD, S_D_RMOD,S_D_MOD, QK_BOOT,
         _______, _______, _______, _______, _______, _______,                        _______, _______, _______, _______, _______,  EE_CLR,
-        _______, _______, _______, _______, _______, _______,                        DRGSCRL, KC_BTN1, KC_BTN3, KC_BTN2, _______, _______,
-        _______, _______, _______, _______, _______, _______,                        SNIPING, _______, _______, _______, _______, _______,
+        DRGSCRL, _______, _______, _______, _______, _______,                        DRGSCRL, KC_BTN1, KC_BTN3, KC_BTN2, _______, _______,
+        SNIPING, _______, _______, _______, _______, _______,                        SNIPING, _______, _______, _______, _______, _______,
                           _______, _______,                                                            _______, _______,
-                                            DRGSCRL, SNIPING,                                 _______,
+                                            _______, _______,                                 _______,
                                                     KC_ACCEL, _______,               _______,
                                                      DRG_TOG, _______,      _______, _______
     ),
 
-    [_LOWER] = LAYOUT_charybdis_5x6_wrapper(
+    [_LOWER] = LAYOUT_wrapper(
          KC_F12, _________________FUNC_LEFT_________________,                        _________________FUNC_RIGHT________________, KC_F11,
      MO(_MEDIA), _________________LOWER_L1__________________,                        _________________LOWER_R1__________________, _______,
         _______, _________________LOWER_L2__________________,                        _________________LOWER_R2__________________, KC_GRAVE,
@@ -67,7 +67,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                      _______, _______,               _______,
                                                      _______, _______,      _______, _______
     ),
-    [_RAISE] = LAYOUT_charybdis_5x6_wrapper(
+    [_RAISE] = LAYOUT_wrapper(
         KC_F12,  _________________FUNC_LEFT_________________,                        _________________FUNC_RIGHT________________, KC_F11,
         KC_GRV,  _________________RAISE_L1__________________,                        _________________RAISE_R1__________________, KC_PSCR,
         _______, _________________RAISE_L2__________________,                        _________________RAISE_R2__________________, KC_BSLS,
@@ -77,18 +77,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                      _______, _______,               _______,
                                                      _______, _______,      _______, _______
     ),
-    [_ADJUST] = LAYOUT_charybdis_5x6_wrapper(
+    [_ADJUST] = LAYOUT_wrapper(
        QK_MAKE, _________________ADJUST_L0_________________,                        _______, _______, _______ , _______, _______, QK_BOOT,
           VRSN, _________________ADJUST_L1_________________,                        _________________ADJUST_R1_________________,  EE_CLR,
        KEYLOCK, _________________ADJUST_L2_________________,                        _________________ADJUST_R2_________________,  TG_MODS,
        _______, _________________ADJUST_L3_________________,                        _________________ADJUST_R3_________________,  KC_MPLY,
-                           DEBUG, _______,                                                            OS_TOGG, _______,
+                          NDEBUG, _______,                                                            OS_TOGG, _______,
                                             _______, QK_RBT,                                  KC_NUKE,
                                                      _______, _______,               _______,
                                                      _______, _______,      KC_NUKE, _______
     ),
 
-    [_MEDIA] = LAYOUT_charybdis_5x6(
+    [_MEDIA] = LAYOUT(
         _______, _______, _______, _______, _______, _______,                        _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______,                        _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______,                        _______, _______, _______, _______, _______, _______,

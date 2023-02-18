@@ -530,36 +530,6 @@ void render_pointing_dpi_status(uint16_t cpi, uint8_t col, uint8_t line) {
 #endif
 
 void render_unicode_mode(uint8_t col, uint8_t line) {
-#ifdef CUSTOM_UNICODE_ENABLE
-    oled_set_cursor(col, line);
-    oled_write_ln_P(PSTR("Unicode:"), false);
-    switch (typing_mode) {
-        case UCTM_WIDE:
-            oled_write_P(PSTR("        Wide"), false);
-            break;
-        case UCTM_SCRIPT:
-            oled_write_P(PSTR("      Script"), false);
-            break;
-        case UCTM_BLOCKS:
-            oled_write_P(PSTR("      Blocks"), false);
-            break;
-        case UCTM_REGIONAL:
-            oled_write_P(PSTR("    Regional"), false);
-            break;
-        case UCTM_AUSSIE:
-            oled_write_P(PSTR("      Aussie"), false);
-            break;
-        case UCTM_ZALGO:
-            oled_write_P(PSTR("       Zalgo"), false);
-            break;
-        case UCTM_NO_MODE:
-            oled_write_P(PSTR("      Normal"), false);
-            break;
-        default:
-            oled_write_P(PSTR("     Unknown"), false);
-            break;
-    }
-#endif
 }
 
 void render_mouse_mode(uint8_t col, uint8_t line) {

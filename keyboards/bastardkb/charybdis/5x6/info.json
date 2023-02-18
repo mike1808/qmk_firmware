@@ -6,7 +6,7 @@
     "pid": "0x1833",
   },
   "layouts": {
-    "LAYOUT_charybdis_5x6": {
+    "LAYOUT": {
       "layout": [
         {
           "label": "L00",
