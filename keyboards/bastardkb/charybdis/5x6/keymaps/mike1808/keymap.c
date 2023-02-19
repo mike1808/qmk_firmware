@@ -20,6 +20,10 @@
 #    include "oled/oled_stuff.h"
 #endif // OLED_ENABLE
 
+#ifdef TAP_DANCE_ENABLE
+#    include "tap_dance.h"
+#endif
+
 // clang-format off
 #define LAYOUT_wrapper(...) LAYOUT(__VA_ARGS__)
 #define LAYOUT_base( \
@@ -29,7 +33,7 @@
   ) \
   LAYOUT_wrapper( \
      KC_GRV,  ________________NUMBER_LEFT________________,            ________________NUMBER_RIGHT_______________, KC_MINS, \
-     KC_TAB,   K01,    K02,     K03,     K04,     K05,                K06,     K07,     K08,     K09,     K0A,     K0B, \
+     HT_TAB_GRV,   K01,    K02,     K03,     K04,     K05,                K06,     K07,     K08,     K09,     K0A,     K0B, \
      LALT_T(KC_ESC), K11, K12,  K13,     K14,     K15,                K16,     K17,     K18,     K19,     K1A,     RALT_T(K1B), \
      OS_LSFT, CTL_T(K21), K22,  K23,     K24,     K25,                K26,     K27,     K28,     K29, RCTL_T(K2A), OS_RSFT, \
                        OS_LGUI, OS_LALT,                                                OS_RALT, OS_RGUI, \
@@ -49,8 +53,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_MOUSE] = LAYOUT(
         _______, _______, _______, _______, _______, _______,                        _______, DPI_RMOD,DPI_MOD, S_D_RMOD,S_D_MOD, QK_BOOT,
         _______, _______, _______, _______, _______, _______,                        _______, _______, _______, _______, _______,  EE_CLR,
-        DRGSCRL, _______, _______, _______, _______, _______,                        DRGSCRL, KC_BTN1, KC_BTN3, KC_BTN2, _______, _______,
-        SNIPING, _______, _______, _______, _______, _______,                        SNIPING, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______,                        DRGSCRL, KC_BTN1, KC_BTN3, KC_BTN2, _______, _______,
+        _______, _______, _______, _______, _______, _______,                        SNIPING, _______, _______, _______, _______, _______,
                           _______, _______,                                                            _______, _______,
                                             _______, _______,                                 _______,
                                                     KC_ACCEL, _______,               _______,
@@ -100,6 +104,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 };
 // clang-format on
+//
+#define IS_MOD_TAP(keycode) keycode >= QK_MOD_TAP && keycode <= QK_MOD_TAP_MAX
+
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    if (IS_MOD_TAP(keycode)) return FAST_TAPPING_TERM;
+    return TAPPING_TERM;
+}
+
+// tap-preferred flavor from ZMK
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
+    // if (IS_MOD_TAP(keycode)) return false;
+
+    switch (keycode) {
+        case TD(TD_HT_START)... TD(TD_HT_END):
+            return false;
+        default:
+            return true;
+    }
+    return false;
+}
 
 #if defined(OLED_ENABLE)
 oled_rotation_t oled_init_keymap(oled_rotation_t rotation) {
@@ -122,11 +146,19 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
         return false;
     }
 #endif // OLED_ENABLE
+
+#if defined(TAP_DANCE_ENABLE)
+    if (!process_record_tapdance(keycode, record)) {
+        return false;
+    }
+#endif // TAP_DANCE_ENABLE
     return true;
 }
 
 void keyboard_post_init_keymap(void) {
-    // debug_enable = true;
+    debug_keyboard = true;
+    debug_matrix = true;
+    debug_enable = true;
     // debug_mouse  = true;
 
     // pimoroni_trackball_set_rgbw(0, 0, 0, 255);

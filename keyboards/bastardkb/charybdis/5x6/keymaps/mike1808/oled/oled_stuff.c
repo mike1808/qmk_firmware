@@ -388,7 +388,7 @@ void render_bootmagic_status(uint8_t col, uint8_t line) {
     }
 
     oled_write_P(PSTR(" "), false);
-    oled_write_P(PSTR(OLED_RENDER_BOOTMAGIC_NKRO), keymap_config.nkro);
+    oled_write_P(PSTR(OLED_RENDER_BOOTMAGIC_SWAP), swap_hands);
     oled_write_P(PSTR(" "), false);
 
 #if defined(AUTOCORRECTION_ENABLE) || defined(AUTOCORRECT_ENABLE)

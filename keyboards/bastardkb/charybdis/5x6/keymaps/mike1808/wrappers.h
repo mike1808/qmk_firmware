@@ -4,6 +4,7 @@
 
 #pragma once
 #include "drashna.h"
+#include "keycodes.h"
 
 #undef _________________QWERTY_L1_________________
 #undef _________________QWERTY_L2_________________
@@ -41,11 +42,11 @@
 
 // clang-format off
 
-#define _________________QWERTY_L1_________________       KC_Q,    KC_W,    KC_E,    KC_R,    KC_T
+#define _________________QWERTY_L1_________________       HT_Q_1,    HT_W_2,    HT_E_3,    HT_R_4,    HT_T_5
 #define _________________QWERTY_L2_________________       KC_A,    KC_S,    KC_D,    KC_F,    KC_G
 #define _________________QWERTY_L3_________________       KC_Z,    KC_X,    KC_C,    KC_V,    KC_B
 
-#define _________________QWERTY_R1_________________       KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS
+#define _________________QWERTY_R1_________________       HT_Y_6,    HT_U_7,    HT_I_8,    HT_O_9,    HT_P_0,    KC_BSLS
 #define _________________QWERTY_R2_________________       KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT
 #define _________________QWERTY_R3_________________       KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH
 
@@ -79,9 +80,9 @@
 #endif // AUTO_SHIFT_ENABLED
 
 #define _________________ADJUST_L1_________________       RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI, RGB_TOG
-#define _________________ADJUST_L2_________________       _______, CK_TOGG, AU_ON,   AU_OFF,  AG_NORM
+#define _________________ADJUST_L2_________________       _______, _______, _______, CG_NORM, AG_NORM
 #define _________________ADJUST_L3_________________       RGB_M_P, RGB_SPI, RGB_SAD, RGB_VAD, KC_RGB_T
 
 #define _________________ADJUST_R1_________________       KC_SEC1, KC_SEC2, KC_SEC3, KC_SEC4, KC_SEC5
-#define _________________ADJUST_R2_________________       AG_SWAP, _______, _______, _______, _______
+#define _________________ADJUST_R2_________________       AG_SWAP, CG_SWAP, _______, _______, _______
 #define _________________ADJUST_R3_________________       MG_NKRO, KC_MUTE, KC_VOLD, KC_VOLU, KC_MNXT

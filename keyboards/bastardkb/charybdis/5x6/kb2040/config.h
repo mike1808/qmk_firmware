@@ -32,11 +32,6 @@
 #define MATRIX_ROW_PINS_RIGHT \
     { PIN_D8, PIN_D9, NO_PIN, PIN_A1, PIN_A2, PIN_A3 }
 
-#ifdef DIODE_DIRECTION
-#    undef DIODE_DIRECTION
-#endif // DIODE_DIRECTION
-#define DIODE_DIRECTION ROW2COL
-
 /* Handedness. */
 // #define EE_HANDS
 // #define MASTER_LEFT
@@ -52,7 +47,7 @@
 #define SERIAL_USART_SPEED (2 * 1024 * 1024)
 
 /* RGB settings. */
-#define RGB_DI_PIN PIN_A0
+// #define RGB_DI_PIN PIN_A0
 
 /* SPI & PMW3360 settings. */
 // #define SPI_DRIVER SPID1
@@ -67,12 +62,12 @@
 
 /* Reset. */
 #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET
-#define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_LED GP17
+#define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_LED GP25
 #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_TIMEOUT 1000U
 
 // settings for the oled keyboard demo with Adafruit 0.91" OLED display on the Stemma QT port
 #define OLED_DISPLAY_128X32
-#define I2C_DRIVER I2CD1
+#define I2C_DRIVER I2CD0
 #define I2C1_SDA_PIN GP12
 #define I2C1_SCL_PIN GP13
 
