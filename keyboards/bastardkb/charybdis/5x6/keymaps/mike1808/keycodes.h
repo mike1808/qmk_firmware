@@ -13,6 +13,7 @@
 #    define HT_I_8 TD(TD_HT_I_8)
 #    define HT_O_9 TD(TD_HT_O_9)
 #    define HT_P_0 TD(TD_HT_P_0)
+#    define HT_TAB_GRV TD(TD_HT_TAB_GRV)
 
 #elif
 
@@ -26,5 +27,6 @@
 #    define HT_I_8 KC_I
 #    define HT_O_9 KC_O
 #    define HT_P_0 KC_P
+#    define HT_TAB_GRV KC_TAB
 
 #endif

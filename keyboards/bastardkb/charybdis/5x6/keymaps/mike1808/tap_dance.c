@@ -55,4 +55,5 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_HT_I_8] = ACTION_TAP_DANCE_TAP_HOLD(KC_I, KC_8),
     [TD_HT_O_9] = ACTION_TAP_DANCE_TAP_HOLD(KC_O, KC_9),
     [TD_HT_P_0] = ACTION_TAP_DANCE_TAP_HOLD(KC_P, KC_0),
+    [TD_HT_TAB_GRV] = ACTION_TAP_DANCE_TAP_HOLD(KC_TAB, KC_GRV),
 };

@@ -13,6 +13,7 @@ enum {
     TD_HT_I_8,
     TD_HT_O_9,
     TD_HT_P_0,
+    TD_HT_TAB_GRV,
     TD_HT_END,
 };
 
