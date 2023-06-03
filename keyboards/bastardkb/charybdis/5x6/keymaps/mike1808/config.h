@@ -22,7 +22,7 @@
 #define FAST_TAPPING_TERM 150
 #define TAPPING_TERM_PER_KEY
 // tap-preferred flavor from ZMK
-#define IGNORE_MOD_TAP_INTERRUPT
+// #define IGNORE_MOD_TAP_INTERRUPT
 // #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 
 

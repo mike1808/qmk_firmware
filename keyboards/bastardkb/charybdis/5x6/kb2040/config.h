@@ -32,11 +32,6 @@
 #define MATRIX_ROW_PINS_RIGHT \
     { PIN_D8, PIN_D9, NO_PIN, PIN_A1, PIN_A2, PIN_A3 }
 
-#ifdef DIODE_DIRECTION
-#    undef DIODE_DIRECTION
-#endif // DIODE_DIRECTION
-#define DIODE_DIRECTION ROW2COL
-
 /* Handedness. */
 // #define EE_HANDS
 // #define MASTER_LEFT
@@ -52,7 +47,7 @@
 #define SERIAL_USART_SPEED (2 * 1024 * 1024)
 
 /* RGB settings. */
-#define RGB_DI_PIN PIN_A0
+// #define RGB_DI_PIN PIN_A0
 
 /* SPI & PMW3360 settings. */
 // #define SPI_DRIVER SPID1

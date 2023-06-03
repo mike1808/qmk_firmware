@@ -1,8 +1,8 @@
 # MCU name
-MCU = RP2040
+# MCU = RP2040
 
 # Bootloader selection
-BOOTLOADER = rp2040
+# BOOTLOADER = rp2040
 
 OPT_DEFS += -DHAL_USE_I2C=TRUE -DHAL_USE_SPI=TRUE
 
@@ -34,7 +34,7 @@ SPLIT_KEYBOARD = yes
 POINTING_DEVICE_ENABLE = yes # Enable trackball
 
 SERIAL_DRIVER = vendor
-WS2812_DRIVER = vendor
+# WS2812_DRIVER = vendor
 
 OLED_ENABLE = yes
 OLED_DRIVER = SSD1306
