@@ -3,6 +3,46 @@
     "usb": {
         "device_version": "1.0.0",
     },
+    "matrix_pins": {
+        "cols": [
+            "GP2",
+            "GP3",
+            "GP4",
+            "GP5",
+            "GP6",
+            "GP7"
+        ],
+        "rows": [
+            "GP8",
+            "GP9",
+            "GP10",
+            "GP27",
+            "GP28",
+            "GP29"
+        ]
+    },
+    "split": {
+        "matrix_pins": {
+            "right": {
+                "cols": [
+                    "GP2",
+                    "GP3",
+                    "GP4",
+                    "GP5",
+                    "GP6",
+                    "GP7"
+                ],
+                "rows": [
+                    "GP8",
+                    "GP9",
+                    null,
+                    "GP27",
+                    "GP28",
+                    "GP29"
+                ]
+            }
+        }
+    },
     "rgb_matrix": {
         "driver": "WS2812"
     },

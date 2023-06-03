@@ -19,23 +19,9 @@
 
 #include "pins.h"
 
-/* Key matrix configuration. */
-#define MATRIX_COL_PINS \
-    { PIN_D2, PIN_D3, PIN_D4, PIN_D5, PIN_D6, PIN_D7 }
-
-#define MATRIX_ROW_PINS \
-    { PIN_D8, PIN_D9, PIN_D10, PIN_A1, PIN_A2, PIN_A3 }
-
-#define MATRIX_COL_PINS_RIGHT \
-    { PIN_D2, PIN_D3, PIN_D4, PIN_D5, PIN_D6, PIN_D7 }
-
-#define MATRIX_ROW_PINS_RIGHT \
-    { PIN_D8, PIN_D9, NO_PIN, PIN_A1, PIN_A2, PIN_A3 }
 
 /* Handedness. */
-// #define EE_HANDS
-// #define MASTER_LEFT
-// #define MASTER_RIGHT
+#define MASTER_RIGHT
 
 /* serial.c configuration (for split keyboard). */
 #define SERIAL_PIO_USE_PIO1
