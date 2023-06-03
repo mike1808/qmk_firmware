@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "5x6.h"
+#include "quantum.h"
 
 // clang-format off
 #ifdef RGB_MATRIX_ENABLE
@@ -40,12 +40,12 @@ led_config_t g_led_config = { {
 }, {
     /* LED index to physical position. */
     // Left split.
-    {   0,   0 }, {   0,  12 }, {   0,  24 }, {   0,  36 }, {  0,   48 }, {  0,   60 }, 
+    {   0,   0 }, {   0,  12 }, {   0,  24 }, {   0,  36 }, {  0,   48 }, {  0,   60 },
     {  16,  60 }, {  16,  48 }, {  16,  36 }, {  16,  24 }, {  16,  12 }, {  16,   0 },
     {  32,   0 }, {  32,  12 }, {  32,  24 }, {  32,  36 }, {  32,  48 }, {  32,  60 },
     {  48,  60 }, {  48,  48 }, {  48,  36 }, {  48,  24 }, {  48,  12 }, {  48,   0 },
     {  64,   0 }, {  64,  12 }, {  64,  24 }, {  64,  36 }, {  64,  48 }, {  64,  60 },
-    {  80,  60 }, {  80,  48 }, 
+    {  80,  60 }, {  80,  48 },
     // Right split.
     { 224,  60 }, { 224,  48 }, { 224,  36 }, { 224,  24 }, { 224, 12 }, { 224, 0 },
     { 208,   0 }, { 208,  12 }, { 208,  24 }, { 208,  36 }, { 208, 48 }, { 208, 60 },
@@ -60,7 +60,7 @@ led_config_t g_led_config = { {
     LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT,
     LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT,
     LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT,
-    LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, 
+    LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT,
     // Right split.
     LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT,
     LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT,

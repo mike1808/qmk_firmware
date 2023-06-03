@@ -29,8 +29,8 @@ ifeq ($(strip $(TAP_DANCE_ENABLE)), yes)
 endif
 
 # debug
-CONSOLE_ENABLE                = yes
+CONSOLE_ENABLE                = no
 DEBUG_MATRIX_SCAN_RATE_ENABLE = no
 
 
-POINTING_DEVICE_DRIVER = pmw3360
+OINTING_DEVICE_DRIVER = pmw3360
