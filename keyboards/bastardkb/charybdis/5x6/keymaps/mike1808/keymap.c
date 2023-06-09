@@ -33,8 +33,8 @@
   ) \
   LAYOUT_wrapper( \
      KC_GRV,  ________________NUMBER_LEFT________________,            ________________NUMBER_RIGHT_______________, KC_MINS, \
-     HT_TAB_GRV,   K01,    K02,     K03,     K04,     K05,                K06,     K07,     K08,     K09,     K0A,     K0B, \
-     LALT_T(KC_ESC), K11, K12,  K13,     K14,     K15,                K16,     K17,     K18,     K19,     K1A,     RALT_T(K1B), \
+     HT_TAB_GRV,     K01, K02,  K03,     K04,     K05,                K06,     K07,     K08,     K09,     K0A,     K0B, \
+     KC_ESC,         K11, K12,  K13,     K14,     K15,                K16,     K17,     K18,     K19,     K1A,     RALT_T(K1B), \
      OS_LSFT, CTL_T(K21), K22,  K23,     K24,     K25,                K26,     K27,     K28,     K29, RCTL_T(K2A), OS_RSFT, \
                        OS_LGUI, OS_LALT,                                                OS_RALT, OS_RGUI, \
                                 KC_SPC, BK_LWER,                                        DL_RAIS,  \
