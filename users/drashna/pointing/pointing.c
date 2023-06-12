@@ -69,7 +69,7 @@ bool process_record_pointing(uint16_t keycode, keyrecord_t* record) {
 }
 
 layer_state_t layer_state_set_pointing(layer_state_t state) {
-    if (layer_state_cmp(state, _GAMEPAD) || layer_state_cmp(state, _DIABLO) || layer_state_cmp(state, _DIABLOII)) {
+    if (layer_state_cmp(state, _DIABLO) || layer_state_cmp(state, _DIABLOII)) {
         state |= ((layer_state_t)1 << _MOUSE);
         set_auto_mouse_enable(false); // auto mouse can be disabled any time during run time
     } else {
